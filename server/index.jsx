@@ -2,10 +2,15 @@ import express from 'express';
 import yields from 'express-yields';
 import fs from 'fs-extra';
 import webpack from 'webpack';
+import React from 'react';
 import { argv } from 'optimist';
 import { get } from 'request-promise';
 import { questions, question } from '../data/api-real-urls';
 import { delay } from 'redux-saga';
+import getStore from '../src/getStore';
+import { renderToString } from 'react-dom/server';
+import { Provider } from 'react-redux';
+import App from '../src/App';
 
 const middleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
@@ -13,6 +18,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 const useLiveData = argv.useLiveData === "true";
+const useServerRender = argv.useServerRender === "true";
 
 function * getQuestions() {
 	let data;
@@ -62,6 +68,27 @@ if(process.env.NODE_ENV === 'development') {
 
 app.get(['/'], function * (req, res) {
 	let index = yield fs.readFile('./public/index.html', 'utf-8');
+	
+	const initialState = {
+		questions: []
+	};
+
+	const questions = yield getQuestions();
+	initialState.questions = questions.item;
+
+	const store = getStore(initialState);
+
+	if(useServerRender) {
+		const appRendered = renderToString(
+			<Provider store={store}>
+				<App />
+			</Provider>
+		);
+		index = index.replace(`<%= preloadedApplication %>`, appRendered);
+	} else {
+		index = index.replace(`<%= preloadedApplication %>`, `Working on it...`);
+	}
+
 	res.send(index);
 });
 
