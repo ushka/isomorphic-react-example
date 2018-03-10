@@ -20,6 +20,7 @@
     "express": "^4.16.2",
     "express-yields": "^1.1.2",
     "fs-extra": "^5.0.0",
+    "lodash": "^4.17.5",
     "optimist": "^0.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
