@@ -11,6 +11,9 @@ import getStore from '../src/getStore';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import App from '../src/App';
+import { ConnectedRouter } from 'react-router-redux';
+import createHistory from 'history/createMemoryHistory';
+
 
 const middleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
@@ -66,22 +69,28 @@ if(process.env.NODE_ENV === 'development') {
   app.use(hotMiddleware(compiler));
 }
 
-app.get(['/'], function * (req, res) {
+app.get(['/', '/questions/:id'], function * (req, res) {
 	let index = yield fs.readFile('./public/index.html', 'utf-8');
 	
 	const initialState = {
 		questions: []
 	};
 
+	const history = createHistory({
+		initialEntries: [req.path],
+	});
 	const questions = yield getQuestions();
+
 	initialState.questions = questions.item;
 
-	const store = getStore(initialState);
+	const store = getStore(history, initialState);
 
 	if(useServerRender) {
 		const appRendered = renderToString(
 			<Provider store={store}>
-				<App />
+				<ConnectedRouter history={history}>    		
+					<App />
+				</ConnectedRouter>
 			</Provider>
 		);
 		index = index.replace(`<%= preloadedApplication %>`, appRendered);
