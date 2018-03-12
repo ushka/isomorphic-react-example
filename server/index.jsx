@@ -5,6 +5,7 @@ import webpack from 'webpack';
 import React from 'react';
 import { argv } from 'optimist';
 import { get } from 'request-promise';
+import path from 'path';
 import { questions, question } from '../data/api-real-urls';
 import { delay } from 'redux-saga';
 import getStore from '../src/getStore';
@@ -13,7 +14,6 @@ import { Provider } from 'react-redux';
 import App from '../src/App';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createMemoryHistory';
-
 
 const middleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
@@ -67,6 +67,8 @@ if(process.env.NODE_ENV === 'development') {
   }));
 
   app.use(hotMiddleware(compiler));
+} else {
+	app.use(express.static(path.resolve(__dirname, '../dist')));
 }
 
 app.get(['/', '/questions/:id'], function * (req, res) {

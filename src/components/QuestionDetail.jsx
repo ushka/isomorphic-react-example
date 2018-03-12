@@ -13,6 +13,7 @@ const QuestionDetailDisplay = ({title, body, answer_count, tags}) => (
 				<div className="mb-3">
 					<TagsList tags={tags} />
 				</div>
+				{body}
 				<Markdown source={body} />
 				<div>
 					{answer_count} Answers
