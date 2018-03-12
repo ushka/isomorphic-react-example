@@ -16,6 +16,10 @@ export const questions = ( state = [], {type, questions} ) => {
   /**
     * Create a new state by combining the existing state with the question(s) that has been newly fetched
   */
+  if(type === "FETCHED_QUESTION") {
+    state = unionWith([question], state, questionEquality);
+  }
+
   if(type === "FETCHED_QUESTIONS") {
     state = unionWith(state, questions, questionEquality);
   }

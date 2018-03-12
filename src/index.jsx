@@ -52,3 +52,5 @@ store.subscribe(() => {
 });
 
 fetchDataForLocation(history.location);
+history.listen(fetchDataForLocation);
+
