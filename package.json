@@ -8,7 +8,8 @@
     "start-dev-live": "cross-env NODE_ENV=development babel-node server --useLiveData=true --useServerRender=true",
     "start-dev": "cross-env NODE_ENV=development babel-node server --useServerRender=true",
     "build": "cross-env webpack --config ./webpack.config.prod.babel.js",
-    "start-prod": "npm run build && cross-env NODE_ENV=production babel-node server --useLiveData=true --useServerRender=true"
+    "start-prod": "npm run build && cross-env NODE_ENV=production babel-node server --useLiveData=true --useServerRender=true",
+    "start": "npm run start-prod",
   },
   "keywords": [],
   "author": "",
