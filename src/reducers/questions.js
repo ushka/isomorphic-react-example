@@ -1,6 +1,6 @@
 import unionWith from 'lodash/unionWith';
 
-export const questions = ( state = [], {type, questions} ) => {
+export const questions = ( state = [], {type, questions, question} ) => {
   /**
   * Question Equality returns true if two questions are equal, based on a weak check of their question_id property
   * @param a - The first question
